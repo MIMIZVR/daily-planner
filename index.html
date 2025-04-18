@@ -4,41 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Daily Planner</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
 <body>
-  <header class="header">
-    <img src="images/Daily Planner.png" alt="Daily Planner Logo" class="logo">
-    <div id="date-time">Loading date & time...</div>
-  </header>
+    <header class="header">
+        <div class="logo-box">
+          <img src="images/Daily Planner.png" alt="Daily Planner Logo" class="logo">
+        </div>
 
-  <main class="main-grid">
-    <section class="card" id="todo">
-      <h2>To-Do List</h2>
-      <!-- Later: input + list -->
-    </section>
+        <div class="weather" id="weatherBox">Loading weather...</div>
 
-    <section class="card" id="quote">
-      <h2>Quote of the Day</h2>
-      <!-- Later: JS generated quote -->
-    </section>
+        
+        <div class="time-block">
+          <div class="calendar" id="currentDate">April 18, 2025</div>
+          <div class="clock" id="currentTime">00:00</div>
+        </div>
+      </header>
 
-    <section class="card" id="weather">
-      <h2>Weather</h2>
-      <!-- Later: weather info here -->
-    </section>
+<main class="main-layout">
+    <div class="left-side">
+        <!-- აქ არის მარცხენა მხარე, სადაც მოთავსებულია To-Do List და Random Quote Generator -->
+        <section class="card" id="todo">
+            <h2>To-Do List</h2>
+            <div class="todo-input">
+                <input type="text" id="taskInput" placeholder="Enter a task..." />
+                <button id="addTaskBtn">Add</button>
+            </div>
+            <ul id="taskList"></ul>
+        </section>
+        
+        <section class="card" id="quote">
+            <h2>Quote of the Day</h2>
+            <!-- აქ იქნება ციტატა -->
+        </section>
+    </div>
 
-    <section class="card" id="calendar">
-      <h2>Calendar</h2>
-      <!-- Later: calendar here -->
-    </section>
+    <div class="right-side">
+        <!-- აქ არის მარჯვენა მხარე, სადაც იქნება schedule საათების list-ით -->
+        <section class="card" id="schedule">
+            <h2>Schedule</h2>
+            <!-- აქ იქნება საათების სიები -->
+        </section>
 
-    <section class="card" id="form">
-      <h2>Quick Note</h2>
-      <!-- Later: form validation -->
-    </section>
-  </main>
+        <!-- Today's Mood animation ქვედა კუთხეში -->
+        <section class="card" id="mood">
+            <h2>Today's Mood</h2>
+            <!-- ეს იქნება ანიმაცია (მაგალითად, ემოციების გამოახატვა) -->
+        </section>
+    </div>
+</main>
+
+      
+
+ 
 
   <footer class="footer">
     <p>Created by Maia • 2025</p>
