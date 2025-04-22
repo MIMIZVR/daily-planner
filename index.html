@@ -9,20 +9,44 @@
   <link rel="stylesheet" href="style.css" />
   <script src="script.js" defer></script>
 </head>
+
+
 <body>
-    <header class="header">
+  <header class="header" id="header">
+       <!-- Logo -->
         <div class="logo-box">
-          <img src="images/Daily Planner.png" alt="Daily Planner Logo" class="logo">
+          <img src="images/Daily Planner.png" alt="Logo of Daily Planner" class="logo">
         </div>
 
-        <div class="weather" id="weatherBox">Loading weather...</div>
+        <!-- Weather Box -->
+        <div class="center-box">
+          <div id="weatherBox">
+            <img class="weather-icon" src="" alt="Weather Icon">
+            <div class="weather-info">
+              <div class="weather-temp">--°C</div>
+              <div class="weather-message">Loading...</div>
+            </div>
+          </div>
 
+          <!-- Time and Calendar -->
+          <div class="time-box">
+            <div class="calendar" id="currentDate">April 18, 2025</div>
+            <div class="clock" id="currentTime">00:00</div>
+          </div>
+        </div>
+
+       <!--  Gender Selection -->
+        <div class="auth-box">
+          <label for="genderSelect">სქესი:</label>
+          <select id="genderSelect">
+            <!-- <option value="">აირჩიე</option> -->
+            <option value="female">მდედრობითი</option>
+            <option value="male">მამრობითი</option>
+          </select>
+          <button id="authBtn">შესვლა</button>
+        </div>
         
-        <div class="time-block">
-          <div class="calendar" id="currentDate">April 18, 2025</div>
-          <div class="clock" id="currentTime">00:00</div>
-        </div>
-      </header>
+  </header>
 
 <main class="main-layout">
     <div class="left-side">
@@ -38,7 +62,7 @@
         
         <section class="card" id="quote">
             <h2>Quote of the Day</h2>
-            <!-- აქ იქნება ციტატა -->
+            <div id="quoteOfTheDay"></div>
         </section>
     </div>
 
@@ -46,13 +70,26 @@
         <!-- აქ არის მარჯვენა მხარე, სადაც იქნება schedule საათების list-ით -->
         <section class="card" id="schedule">
             <h2>Schedule</h2>
-            <!-- აქ იქნება საათების სიები -->
+            <div class="schedule-inputs">
+              <input type="time" id="timeInput" />
+              <input type="text" id="activityInput" placeholder="Enter activity..." />
+              <button id="addScheduleBtn">Add</button>
+            </div>
+            <ul id="scheduleList"></ul>
         </section>
 
         <!-- Today's Mood animation ქვედა კუთხეში -->
         <section class="card" id="mood">
             <h2>Today's Mood</h2>
-            <!-- ეს იქნება ანიმაცია (მაგალითად, ემოციების გამოახატვა) -->
+            <div class="emoji-selector">
+              <span class="emoji" data-mood="happy">😊</span>
+              <span class="emoji" data-mood="sad">😔</span>
+              <span class="emoji" data-mood="angry">😡</span>
+              <span class="emoji" data-mood="excited">🤩</span>
+              <span class="emoji" data-mood="tired">🥱</span>
+            </div>
+        
+            <div id="selectedMood" class="animated-mood"></div>
         </section>
     </div>
 </main>
