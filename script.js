@@ -1,170 +1,226 @@
-document.getElementById('authBtn').addEventListener('click', function () {
-  const gender = document.getElementById('genderSelect').value;
-  const body = document.body;
-// თემა ჩატვირთვისას
-window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.body.classList.add(savedTheme);
-  }
-});
+// ==== Auth Logic ====
+const authForm = document.getElementById('authForm');
+const authBtn = document.getElementById('authBtn');
+const loginForm = document.getElementById('authFormContent');
+const logoutBtn = document.getElementById('logoutBtn');  // Corrected ID for logout button
+const registerBtn = document.getElementById('registerBtn');
+const closeFormBtn = document.getElementById('closeFormBtn');
 
-// ღილაკზე დაჭერისას
-document.getElementById('authBtn').addEventListener('click', function () {
-  const gender = document.getElementById('genderSelect').value;
-  const body = document.body;
-
-  body.classList.remove('theme-female', 'theme-male');
-
-  if (gender === 'female') {
-    body.classList.add('theme-female');
-    localStorage.setItem('theme', 'theme-female');
-  } else if (gender === 'male') {
-    body.classList.add('theme-male');
-    localStorage.setItem('theme', 'theme-male');
+// Update Auth UI based on whether the user is logged in
+function updateAuthUI() {
+  const currentUser = localStorage.getItem('currentUser');
+  if (currentUser) {
+    // If logged in, show logout button and hide login button
+    authBtn.style.display = 'none';
+    logoutBtn.style.display = 'inline-block';
+    logoutBtn.textContent = "გასვლა";
   } else {
-    alert('გთხოვ აირჩიო სქესი');
+    // If not logged in, show login button and hide logout button
+    authBtn.style.display = 'inline-block';
+    // authBtn.textContent = 'შესვლა';
+    logoutBtn.style.display = 'none';
   }
+}
+
+// Auth button click to show the login form
+authBtn.addEventListener('click', () => {
+  authForm.style.display = 'block'; // Make the form visible when login button is clicked
 });
 
-  // წაშალე ძველი თემები
-  body.classList.remove('theme-female', 'theme-male');
+// Form submission event to handle login
+loginForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
 
-  // დაამატე არჩეული თემა
-  if (gender === 'female') {
-    body.classList.add('theme-female');
-  } else if (gender === 'male') {
-    body.classList.add('theme-male');
+  if (username && password) {
+    localStorage.setItem('currentUser', username); // Set user in local storage
+    alert(`Welcome, ${username}!`);
+    authForm.style.display = 'none'; // Close the form
+    updateAuthUI(); // Update UI for authenticated state
   } else {
-    alert('გთხოვ აირჩიო სქესი');
+    alert("Please enter valid username and password.");
+  }
+});
+
+// Logout button click to log out the user
+logoutBtn.addEventListener('click', () => {
+  localStorage.removeItem('currentUser'); // Remove user from local storage
+  updateAuthUI(); // Update UI for unauthenticated state
+  alert("თქვენ გამოხვედით სისტემიდან.");
+});
+
+// Register button (in case you want to implement registration)
+registerBtn.addEventListener('click', () => {
+  alert("Registration functionality is not implemented yet.");
+});
+
+// Run the updateAuthUI function on page load to show correct button state
+window.addEventListener('DOMContentLoaded', updateAuthUI);
+
+// ფორმის დახურვა "X" ღილაკით
+closeFormBtn.addEventListener('click', () => {
+  authForm.style.display = 'none';
+});
+
+// გარეთ დაჭერისას ფორმის დახურვა
+window.addEventListener('click', (e) => {
+  if (e.target === authForm) {
+    authForm.style.display = 'none';
   }
 });
 
 
-// ==== Live Clock ====
+
+// ==== Weather Logic ====
+const weatherBox = document.getElementById("weatherBox");
+const weatherTemp = document.querySelector(".weather-temp");
+const weatherIcon = document.querySelector(".weather-icon");
+const weatherMsg = document.querySelector(".weather-message");
+const API_KEY = "22d8dc9681ce0f0227b6445d0ffa7bcc";
+
+function fetchWeather(city = "Tbilisi") {
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
+    .then(response => {
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      return response.json();
+    })
+    .then(data => {
+      weatherTemp.textContent = `${Math.round(data.main.temp)}°C`;
+      weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+      weatherIcon.alt = data.weather[0].description;
+      weatherMsg.textContent = data.weather[0].description;
+    })
+    .catch(error => {
+      weatherTemp.textContent = "--";
+      weatherMsg.textContent = "Unable to fetch weather.";
+      console.error("Weather Error:", error);
+    });
+}
+
+// ==== Clock Logic ====
 function updateClock() {
   const now = new Date();
-  const timeString = now.toLocaleTimeString('en-GB');
-  document.querySelector('.clock').textContent = timeString;
+  document.querySelector('.clock').textContent = now.toLocaleTimeString('en-GB');
 }
 setInterval(updateClock, 1000);
-updateClock(); // Initial update
 
-// ==== Calendar ====
+// ==== Calendar Logic ====
 function updateCalendar() {
   const now = new Date();
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   document.querySelector('.calendar').textContent = now.toLocaleDateString('en-US', options);
 }
+setInterval(updateCalendar, 3600000);
 
-// Updates every hour
-setInterval(updateCalendar, 3600000); 
-updateCalendar(); // Initial update on page load
-
-
-
-const authBtn = document.getElementById("authBtn");
-let isLoggedIn = false; // ცვლადი მდგომარეობის შესანახად
-
-authBtn.addEventListener("click", () => {
-  if (isLoggedIn) {
-    // გამოსვლა
-    isLoggedIn = false;
-    authBtn.textContent = "შესვლა";
-    alert("გადი პირადი კაბინეტიდან");
-    // აქ შეგიძლია დამალო პირადი კაბინეტის ელემენტები
-  } else {
-    // შესვლა
-    isLoggedIn = true;
-    authBtn.textContent = "გასვლა";
-    alert("მოგესალმებით, პირად კაბინეტში!");
-    // აქ შეგიძლია აჩვენო პირადი კაბინეტის ელემენტები
+// ==== Gender Theme Logic ====
+const genderSelect = document.getElementById('genderSelect');
+function applyGenderTheme(gender) {
+  document.body.classList.remove('theme-male', 'theme-female', 'bg-male', 'bg-female');
+  if (gender === 'female') {
+    document.body.classList.add('theme-female', 'bg-female');
+  } else if (gender === 'male') {
+    document.body.classList.add('theme-male', 'bg-male');
   }
+}
+genderSelect.addEventListener('change', () => {
+  const gender = genderSelect.value;
+  localStorage.setItem("selectedGender", gender);
+  applyGenderTheme(gender);
 });
 
-
-
-
-// ==== To-Do List ====
+// ==== ToDo List Logic ====
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
+let savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-addTaskBtn.addEventListener("click", () => {
+function createTaskElement(taskTextValue) {
+  const li = document.createElement("li");
+  const taskText = document.createElement("span");
+  taskText.textContent = taskTextValue;
+  taskText.classList.add("task-text");
+
+  taskText.addEventListener("click", () => {
+    taskText.classList.toggle("completed");
+    showQuoteBasedOnTasks();
+  });
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "❌";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.addEventListener("click", () => {
+    li.remove();
+    savedTasks = savedTasks.filter(task => task !== taskTextValue);
+    localStorage.setItem("tasks", JSON.stringify(savedTasks));
+    showQuoteBasedOnTasks();
+  });
+
+  li.appendChild(taskText);
+  li.appendChild(deleteBtn);
+  taskList.appendChild(li);
+}
+
+savedTasks.forEach(createTaskElement);
+addTaskBtn.addEventListener("click", addTask);
+taskInput.addEventListener("keydown", (e) => e.key === "Enter" && addTask());
+
+function addTask() {
   const task = taskInput.value.trim();
   if (task) {
-    const li = document.createElement("li");
-    li.textContent = task;
-
-    li.addEventListener("click", () => {
-      li.classList.toggle("completed");
-      showQuoteBasedOnTasks();  // Update quote based on task status
-    });
-
-    taskList.appendChild(li);
+    createTaskElement(task);
+    savedTasks.push(task);
+    localStorage.setItem("tasks", JSON.stringify(savedTasks));
     taskInput.value = "";
-    showQuoteBasedOnTasks();  // Update quote after adding a task
-  }
-});
-
-function showQuoteBasedOnTasks() {
-  const tasks = taskList.querySelectorAll("li");
-  const completed = taskList.querySelectorAll("li.completed");
-
-  const quoteBox = document.getElementById("quote");
-
-  if (tasks.length > 0 && completed.length === tasks.length) {
-    // All tasks are completed
-    quoteBox.textContent = "Great job! Keep going! 🌟";
-  } else if (completed.length > 0) {
-    // Some tasks are completed
-    quoteBox.textContent = "You're on fire today! 🔥";
-  } else {
-    // No tasks are completed
-    quoteBox.textContent = "Start your day productively! 💪";
+    showQuoteBasedOnTasks();
   }
 }
-// ==== Quote of the Day ====
-const quoteOfTheDayBox = document.getElementById("quoteOfTheDay");
 
-const dailyQuotes = [
-  "Each day is a new beginning. 🌅",
-  "Success is not the key to happiness. Happiness is the key to success. 🌟",
-  "The future belongs to those who believe in the beauty of their dreams. ✨",
-  "Believe you can and you're halfway there. 💪",
-  "It always seems impossible until it’s done. 🚀",
-];
-
-function displayQuoteOfTheDay() {
-  const randomIndex = Math.floor(Math.random() * dailyQuotes.length);
-  quoteOfTheDayBox.textContent = dailyQuotes[randomIndex];
-}
-
-// Initial quote display
-displayQuoteOfTheDay();
-
-// Set a new quote every day at midnight (86400000ms)
-setInterval(displayQuoteOfTheDay, 86400000);  // 86400000 ms = 1 day
-
-// ==== Schedule ====
+// ==== Schedule Logic ====
 const timeInput = document.getElementById("timeInput");
-const activityInput = document.getElementById("activityInput");
+const planInput = document.getElementById("planInput");
 const addScheduleBtn = document.getElementById("addScheduleBtn");
 const scheduleList = document.getElementById("scheduleList");
+let savedSchedule = JSON.parse(localStorage.getItem('schedule')) || [];
 
-addScheduleBtn.addEventListener("click", () => {
+function renderScheduleItem(time, activity) {
+  const li = document.createElement("li");
+  li.classList.add("schedule-item");
+
+  const scheduleText = document.createElement("span");
+  scheduleText.innerHTML = `<strong>${time}</strong>: ${activity}`;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "❌";
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.addEventListener("click", () => {
+    li.remove();
+    savedSchedule = savedSchedule.filter(item => !(item.time === time && item.activity === activity));
+    localStorage.setItem('schedule', JSON.stringify(savedSchedule));
+  });
+
+  li.appendChild(scheduleText);
+  li.appendChild(deleteBtn);
+  scheduleList.appendChild(li);
+}
+
+savedSchedule.forEach(item => renderScheduleItem(item.time, item.activity));
+addScheduleBtn.addEventListener("click", addSchedule);
+planInput.addEventListener("keydown", (e) => e.key === "Enter" && addSchedule());
+
+function addSchedule() {
   const time = timeInput.value.trim();
-  const activity = activityInput.value.trim();
+  const activity = planInput.value.trim();
   if (time && activity) {
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${time}</strong>: ${activity}`;
-    scheduleList.appendChild(li);
+    renderScheduleItem(time, activity);
+    savedSchedule.push({ time, activity });
+    localStorage.setItem('schedule', JSON.stringify(savedSchedule));
     timeInput.value = "";
-    activityInput.value = "";
+    planInput.value = "";
   }
-});
+}
 
-// ==== Mood Selection ====
+// ==== Mood Selection Logic ====
 const emojis = document.querySelectorAll(".emoji");
 const selectedMood = document.getElementById("selectedMood");
 
@@ -175,37 +231,44 @@ emojis.forEach(emoji => {
   });
 });
 
-// ==== Weather (OpenWeather API) ====
-const weatherBox = document.getElementById("weatherBox");
-const weatherTemp = document.querySelector(".weather-temp");
-const weatherIcon = document.querySelector(".weather-icon");
-const weatherMsg = document.querySelector(".weather-message");
+// ==== Quote Logic ====
+const quoteOfTheDayBox = document.getElementById("quoteOfTheDay");
+const dailyQuotes = [
+  "Each day is a new beginning. 🌅",
+  "Success is not the key to happiness. 🌟",
+  "Believe in your dreams. ✨",
+  "Believe you can. 💪",
+  "It always seems impossible until it’s done. 🚀",
+  "“The only way to do great work is to love what you do.” — Steve Jobs",
+  "“Success is not final, failure is not fatal.” — Churchill",
+  "“The future belongs to those who believe in their dreams.” — Eleanor Roosevelt"
+];
 
-const API_KEY = "22d8dc9681ce0f0227b6445d0ffa7bcc"; // Correct API Key
+function displayQuoteOfTheDay() {
+  const randomIndex = Math.floor(Math.random() * dailyQuotes.length);
+  quoteOfTheDayBox.textContent = dailyQuotes[randomIndex];
+}
+setInterval(displayQuoteOfTheDay, 86400000);
 
-function fetchWeather(city = "Tbilisi") {
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      const temp = Math.round(data.main.temp);
-      const iconCode = data.weather[0].icon;
-      const description = data.weather[0].description;
-
-      weatherTemp.textContent = `${temp}°C`;
-      weatherIcon.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-      weatherIcon.alt = description;
-      weatherMsg.textContent = description;
-    })
-    .catch(error => {
-      weatherTemp.textContent = "--";
-      weatherMsg.textContent = "Unable to fetch weather.";
-      console.error("Weather Error:", error);
-    });
+function showQuoteBasedOnTasks() {
+  const tasks = document.querySelectorAll("#taskList li");
+  const completedTasks = document.querySelectorAll("#taskList span.completed");
+  quoteOfTheDayBox.textContent =
+    tasks.length && tasks.length === completedTasks.length
+      ? "Great job! You've completed all tasks!"
+      : "Keep going!";
 }
 
-fetchWeather();  // Initial weather fetch
+// ==== Init All on Page Load ====
+window.addEventListener("DOMContentLoaded", () => {
+  updateAuthUI();
+  fetchWeather();
+  updateClock();
+  updateCalendar();
+  const savedGender = localStorage.getItem("selectedGender");
+  if (savedGender) {
+    genderSelect.value = savedGender;
+    applyGenderTheme(savedGender);
+  }
+  displayQuoteOfTheDay();
+});

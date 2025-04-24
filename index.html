@@ -15,9 +15,9 @@
   <header class="header" id="header">
        <!-- Logo -->
         <div class="logo-box">
-          <img src="images/Daily Planner.png" alt="Logo of Daily Planner" class="logo">
+          <img id="logo"  src="images/Daily Planner.png" alt="Logo of Daily Planner" class="logo" onclick="window.location.reload()">
         </div>
-
+    
         <!-- Weather Box -->
         <div class="center-box">
           <div id="weatherBox">
@@ -36,72 +36,96 @@
         </div>
 
        <!--  Gender Selection -->
-        <div class="auth-box">
-          <label for="genderSelect">სქესი:</label>
-          <select id="genderSelect">
-            <!-- <option value="">აირჩიე</option> -->
-            <option value="female">მდედრობითი</option>
-            <option value="male">მამრობითი</option>
-          </select>
-          <button id="authBtn">შესვლა</button>
+       <div class="auth-box">
+        <label for="genderSelect">სქესი:</label>
+        <select id="genderSelect">
+          <!-- <option value="">აირჩიე</option> -->
+          <option value="female" selected>მდედრობითი</option>
+          <option value="male">მამრობითი</option>
+        </select>
+        <button id="authBtn">შესვლა</button>
+      </div> 
+
+      <!-- Registration Form -->
+     
+      <button id="logoutBtn">გასვლა</button> <!-- ეს არის ღილაკი გასვლისთვის -->
+
+      <div id="authForm">
+        <div id="authFormContent">
+          <button id="closeFormBtn">✖</button>
+          <h2 id="formTitle">შესვლა / რეგისტრაცია</h2>
+          <form id="authFormInner">
+            <label for="username">მომხმარებლის სახელი:</label>
+            <input type="text" id="username" required>
+      
+            <label for="password">პაროლი:</label>
+            <input type="password" id="password" required>
+      
+            <button type="submit" id="loginBtn">შესვლა</button>
+            <button type="button" id="registerBtn">რეგისტრაცია</button>
+          </form>
         </div>
-        
-  </header>
-
-<main class="main-layout">
-    <div class="left-side">
-        <!-- აქ არის მარცხენა მხარე, სადაც მოთავსებულია To-Do List და Random Quote Generator -->
-        <section class="card" id="todo">
-            <h2>To-Do List</h2>
-            <div class="todo-input">
-                <input type="text" id="taskInput" placeholder="Enter a task..." />
-                <button id="addTaskBtn">Add</button>
-            </div>
-            <ul id="taskList"></ul>
-        </section>
-        
-        <section class="card" id="quote">
-            <h2>Quote of the Day</h2>
-            <div id="quoteOfTheDay"></div>
-        </section>
-    </div>
-
-    <div class="right-side">
-        <!-- აქ არის მარჯვენა მხარე, სადაც იქნება schedule საათების list-ით -->
-        <section class="card" id="schedule">
-            <h2>Schedule</h2>
-            <div class="schedule-inputs">
-              <input type="time" id="timeInput" />
-              <input type="text" id="activityInput" placeholder="Enter activity..." />
-              <button id="addScheduleBtn">Add</button>
-            </div>
-            <ul id="scheduleList"></ul>
-        </section>
-
-        <!-- Today's Mood animation ქვედა კუთხეში -->
-        <section class="card" id="mood">
-            <h2>Today's Mood</h2>
-            <div class="emoji-selector">
-              <span class="emoji" data-mood="happy">😊</span>
-              <span class="emoji" data-mood="sad">😔</span>
-              <span class="emoji" data-mood="angry">😡</span>
-              <span class="emoji" data-mood="excited">🤩</span>
-              <span class="emoji" data-mood="tired">🥱</span>
-            </div>
-        
-            <div id="selectedMood" class="animated-mood"></div>
-        </section>
-    </div>
-</main>
-
+      </div>
       
 
- 
+      </header>
+      <!-- Main Page  -->
+      <main class="main-layout">
+        <div class="left-side">
+      
+            <!-- აქ არის მარცხენა მხარე, სადაც მოთავსებულია To-Do List და Random Quote Generator -->
+            <section class="card" id="todo">
+                <h2>To-Do List</h2>
+                <div class="todo-input">
+                    <input type="text" id="taskInput" placeholder="Enter a task..." />
+                    <button id="addTaskBtn">Add</button>
+                </div>
+                <ul id="taskList"></ul>
+            </section>
+            
+            <section class="card" id="quote">
+                <h2>Quote of the Day</h2>
+                <div id="quoteOfTheDay"></div>
+            </section>
+      
+        </div>
 
-  <footer class="footer">
-    <p>Created by Maia • 2025</p>
-  </footer>
 
+        <div class="right-side">
+          <!-- აქ არის მარჯვენა მხარე, სადაც იქნება schedule საათების list-ით -->
+      <section class="card" id="schedule">
+        <h2>Schedule</h2>
+        <div class="schedule-input">
+          <input type="time" class="time-input" id="timeInput" />
+          <input type="text" class="text-input" id="planInput" placeholder="What's planned?" />
+          <button class="add-schedule-btn" id="addScheduleBtn">Add</button>
+        </div>
+        <ul id="scheduleList"></ul>
+      </section>
+
+      <!-- Today's Mood animation ქვედა კუთხეში -->
+      <section class="card" id="mood">
+          <h2>Today's Mood</h2>
+          <div class="emoji-selector">
+            <span class="emoji" data-mood="happy">😊</span>
+            <span class="emoji" data-mood="sad">😔</span>
+            <span class="emoji" data-mood="angry">😡</span>
+            <span class="emoji" data-mood="excited">🤩</span>
+            <span class="emoji" data-mood="tired">🥱</span>
+          </div>
+      
+          <div id="selectedMood" class="animated-mood"></div>
+
+      </section>
+  </div>
+</main>
+
+
+<!-- footer -->
+<footer class="footer">
+  <p>Created with love ❤️ by Maia • 2025</p>
+  <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">⬆ Back to top</button>
+</footer>
 
 </body>
 </html>
